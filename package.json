@@ -22,8 +22,8 @@
     },
     "homepage": "https://github.com/vkasraj/gql-blog#readme",
     "dependencies": {
-        "apollo-server": "^2.6.2",
-        "graphql": "^14.3.1"
+        "apollo-server": "^2.7.0",
+        "graphql": "^14.4.2"
     },
     "devDependencies": {
         "dotenv": "^8.0.0",
