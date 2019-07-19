@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server");
+import { gql } from "apollo-server";
 
 // The GraphQL schema
 const typeDefs = gql`
@@ -7,6 +7,7 @@ const typeDefs = gql`
     type Query {
         "A simple type for getting started!"
         hello: String
+        me: User!
     }
 
     type Mutation {
@@ -63,4 +64,4 @@ const typeDefs = gql`
     }
 `;
 
-module.exports = typeDefs;
+export default typeDefs;

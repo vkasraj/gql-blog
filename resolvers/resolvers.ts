@@ -7,16 +7,19 @@ const user = {
 
 const resolvers = {
     Query: {
-        hello: () => "world"
+        hello: () => "world",
+        me: () => user
     },
     Mutation: {
-        login(parent, { data }, context, info) {
+        login(parent: object, data: object) {
+            console.log(data);
+
             return user;
         },
-        signup(parent, { data }, context, info) {
+        signup(parent: object, data: object) {
             return user;
         }
     }
 };
 
-module.exports = resolvers;
+export default resolvers;
