@@ -1,7 +1,7 @@
-import User, { UserModel } from "../models/user.model";
-import TokenUtil from "../utils/token.util";
-import { deleteProps } from "../utils/object.util";
-import PasswordUtil from "../utils/password.util";
+import User, { UserModel } from "../user/user.model";
+import TokenUtil from "../../utils/token.util";
+import { deleteProps } from "../../utils/object.util";
+import PasswordUtil from "../../utils/password.util";
 
 interface Signup {
     data: {

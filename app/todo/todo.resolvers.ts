@@ -1,5 +1,5 @@
-import Todo, { TodoModel } from "../models/todo.model";
-import { deleteProps } from "../utils/object.util";
+import Todo, { TodoModel } from "./todo.model";
+import { deleteProps } from "../../utils/object.util";
 
 interface TodoCreateInput {
     data: {

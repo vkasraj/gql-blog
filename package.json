@@ -1,26 +1,40 @@
 {
-    "name": "gql-blog",
+    "name": "gql-todo",
     "version": "1.0.0",
-    "description": "A small blog build with Graphql",
+    "description": "A small todo app build with Graphql",
+    "author": "Vikas Raj <vikasraj1911@gmail.com>",
     "main": "bin/www.js",
     "bin": {
-        "gql-blog": "www.js"
+        "gql-todo": "www.js"
     },
     "scripts": {
         "start": "NODE_ENV=production node bin/www.js",
-        "dev": "NODE_ENV=development nodemon -r dotenv/config bin/www.ts"
+        "dev": "NODE_ENV=development nodemon -r dotenv/config bin/www.ts",
+        "build": "NODE_ENV=production tsc"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/vkasraj/gql-blog.git"
+        "url": "git+https://github.com/vkasraj/gql-todo.git"
     },
-    "keywords": [],
-    "author": "",
+    "keywords": [
+        "node",
+        "express",
+        "mongod",
+        "mongodb",
+        "graphql",
+        "graphQl",
+        "server",
+        "api",
+        "rest",
+        "rest api",
+        "todo",
+        "todo mvc"
+    ],
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/vkasraj/gql-blog/issues"
+        "url": "https://github.com/vkasraj/gql-todo/issues"
     },
-    "homepage": "https://github.com/vkasraj/gql-blog#readme",
+    "homepage": "https://github.com/vkasraj/gql-todo#readme",
     "dependencies": {
         "apollo-server": "^2.7.0",
         "bcryptjs": "^2.4.3",
@@ -30,6 +44,7 @@
     },
     "devDependencies": {
         "@types/bcryptjs": "^2.4.2",
+        "@types/graphql": "^14.2.2",
         "@types/jsonwebtoken": "^8.3.2",
         "@types/mongoose": "^5.5.9",
         "@types/node": "^12.6.8",

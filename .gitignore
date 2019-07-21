@@ -1,4 +1,10 @@
-Created .gitignore file for type Node :)
+# Project related
+.vscode
+.intermediate
+.DS_STORE
+build
+
+
 # Logs
 logs
 *.log

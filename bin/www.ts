@@ -1,7 +1,7 @@
 import { ApolloServer } from "apollo-server";
 import mongoose from "mongoose";
-import resolvers from "../resolvers/resolvers";
-import typeDefs from "../typeDefs/typeDefs";
+import resolvers from "../src/resolvers";
+import typeDefs from "../src/typeDefs";
 import keys from "../config/keys";
 
 const server = new ApolloServer({
