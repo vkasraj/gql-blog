@@ -1,4 +1,5 @@
 import { ApolloServer } from "apollo-server";
+import mongoose from "mongoose";
 import resolvers from "../resolvers/resolvers";
 import typeDefs from "../typeDefs/typeDefs";
 import keys from "../config/keys";
@@ -8,10 +9,22 @@ const server = new ApolloServer({
     resolvers
 });
 
-server
-    .listen({
-        port: keys.PORT
+mongoose
+    .connect(keys.MONGO_URI, {
+        useNewUrlParser: true,
+        useFindAndModify: true
     })
-    .then(({ url }: any) => {
-        console.log(`[SERVER::LISTEN] >> ${url}`);
+    .then(() => {
+        console.log("[MONGO] >> Connected");
+
+        server
+            .listen({
+                port: keys.PORT
+            })
+            .then(({ url }: any) => {
+                console.log(`[SERVER] >> Connected ~ ${url}`);
+            });
+    })
+    .catch((error: Error) => {
+        throw error;
     });

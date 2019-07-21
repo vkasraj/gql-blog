@@ -23,9 +23,16 @@
     "homepage": "https://github.com/vkasraj/gql-blog#readme",
     "dependencies": {
         "apollo-server": "^2.7.0",
-        "graphql": "^14.4.2"
+        "bcryptjs": "^2.4.3",
+        "graphql": "^14.4.2",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^5.6.5"
     },
     "devDependencies": {
+        "@types/bcryptjs": "^2.4.2",
+        "@types/jsonwebtoken": "^8.3.2",
+        "@types/mongoose": "^5.5.9",
+        "@types/node": "^12.6.8",
         "dotenv": "^8.0.0",
         "nodemon": "^1.19.1",
         "ts-node": "^8.3.0",

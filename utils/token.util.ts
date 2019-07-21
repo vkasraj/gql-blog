@@ -1,0 +1,32 @@
+import { generate, verify } from "../libs/token/token.lib";
+import keys from "../config/keys";
+
+export default class TokenGenerator {
+    constructor(private ctx: object) {}
+
+    // For generating access token
+    generate(): string {
+        try {
+            const accessToken = generate({
+                secret: keys.TOKEN.KEY,
+                exp: keys.TOKEN.EXP,
+                payload: {
+                    data: this.ctx,
+                    type: "access"
+                }
+            });
+
+            return accessToken;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static verify(token: string) {
+        try {
+            return verify(keys.TOKEN.KEY, token);
+        } catch (error) {
+            throw new Error("Unauthorized Access! Please login");
+        }
+    }
+}

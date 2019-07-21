@@ -15,8 +15,8 @@ const typeDefs = gql`
         """
         This is the description
         """
-        login(data: LoginInput!): User!
-        signup(data: SignupInput!): User!
+        login(data: LoginInput!): AuthPayload!
+        signup(data: SignupInput!): AuthPayload!
         createTodo(data: TodoCreateInput!): Todo!
         updateTodo(data: TodoUpdateInput!): Todo!
         deleteTodo(data: FindInput!): Todo!
@@ -24,10 +24,17 @@ const typeDefs = gql`
 
     # ===== Object Types =====
 
+    type AuthPayload {
+        _id: ID!
+        email: String!
+        username: String!
+        token: String!
+    }
+
     type User {
         _id: ID!
         email: String!
-        name: String!
+        username: String!
     }
 
     type Todo {
@@ -58,7 +65,7 @@ const typeDefs = gql`
     }
 
     input SignupInput {
-        name: String!
+        username: String!
         email: String!
         password: String!
     }
