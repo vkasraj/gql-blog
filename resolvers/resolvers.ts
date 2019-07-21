@@ -1,3 +1,9 @@
+import {
+    todos,
+    createTodo,
+    updateTodo,
+    deleteTodo
+} from "./../app/todo.resolvers";
 import { login, signup } from "./../app/auth.resolvers";
 
 const resolvers = {
@@ -5,11 +11,15 @@ const resolvers = {
         hello: () => "world",
         me: () => {
             return "me";
-        }
+        },
+        todos
     },
     Mutation: {
         login,
-        signup
+        signup,
+        createTodo,
+        updateTodo,
+        deleteTodo
     }
 };
 

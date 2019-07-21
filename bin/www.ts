@@ -12,7 +12,7 @@ const server = new ApolloServer({
 mongoose
     .connect(keys.MONGO_URI, {
         useNewUrlParser: true,
-        useFindAndModify: true
+        useFindAndModify: false
     })
     .then(() => {
         console.log("[MONGO] >> Connected");

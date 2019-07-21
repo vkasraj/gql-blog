@@ -6,8 +6,9 @@ const typeDefs = gql`
 
     type Query {
         "A simple type for getting started!"
-        hello: String
+        hello: String!
         me: User!
+        todos: [Todo]!
     }
 
     type Mutation {
@@ -18,8 +19,8 @@ const typeDefs = gql`
         login(data: LoginInput!): AuthPayload!
         signup(data: SignupInput!): AuthPayload!
         createTodo(data: TodoCreateInput!): Todo!
-        updateTodo(data: TodoUpdateInput!): Todo!
-        deleteTodo(data: FindInput!): Todo!
+        updateTodo(where: FindInput!, data: TodoUpdateInput!): Todo!
+        deleteTodo(where: FindInput!): Todo!
     }
 
     # ===== Object Types =====
@@ -41,6 +42,8 @@ const typeDefs = gql`
         _id: ID!
         title: String!
         description: String!
+        createdAt: String!
+        updatedAt: String!
     }
 
     # ===== Input Types =====
