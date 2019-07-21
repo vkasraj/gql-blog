@@ -4,8 +4,8 @@ interface TokGenerate {
     secret: string;
     exp: string | number;
     payload: {
-        data: any;
-        type: "access" | "refresh";
+        ROLE: ["user" | "admin"];
+        [key: string]: any;
     };
 }
 

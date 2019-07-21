@@ -1,8 +1,9 @@
+import { AuthenticationError } from "apollo-server";
 import { generate, verify } from "../libs/token/token.lib";
 import keys from "../config/keys";
 
 export default class TokenGenerator {
-    constructor(private ctx: object) {}
+    constructor(private ctx: {}) {}
 
     // For generating access token
     generate(): string {
@@ -11,8 +12,8 @@ export default class TokenGenerator {
                 secret: keys.TOKEN.KEY,
                 exp: keys.TOKEN.EXP,
                 payload: {
-                    data: this.ctx,
-                    type: "access"
+                    ...this.ctx,
+                    ROLE: ["user"]
                 }
             });
 
@@ -26,7 +27,7 @@ export default class TokenGenerator {
         try {
             return verify(keys.TOKEN.KEY, token);
         } catch (error) {
-            throw new Error("Unauthorized Access! Please login");
+            throw new AuthenticationError("Unauthorized Access! Please login");
         }
     }
 }
