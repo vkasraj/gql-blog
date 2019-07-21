@@ -1,25 +1,14 @@
 import { ApolloServer } from "apollo-server";
 import mongoose from "mongoose";
-import resolvers from "../src/resolvers";
 import typeDefs from "../src/typeDefs";
+import resolvers from "../src/resolvers";
+import context from "../src/context";
 import keys from "../config/keys";
-import TokenGenerator from "../utils/token.util";
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({ req }) => {
-        const token = req.headers.authorization;
-
-        let USER = null;
-        if (token) {
-            USER = TokenGenerator.verify(token);
-        }
-
-        return {
-            USER
-        };
-    }
+    context
 });
 
 mongoose

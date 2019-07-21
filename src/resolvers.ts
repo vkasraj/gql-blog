@@ -1,3 +1,4 @@
+import { me } from "./../app/user/user.resolvers";
 import { login, signup } from "../app/auth/auth.resolvers";
 import {
     todos,
@@ -8,10 +9,7 @@ import {
 
 const resolvers = {
     Query: {
-        hello: () => "world",
-        me: () => {
-            return "me";
-        },
+        me,
         todos
     },
     Mutation: {
