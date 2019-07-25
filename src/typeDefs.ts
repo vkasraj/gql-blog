@@ -7,7 +7,6 @@ const typeDefs = gql`
     type Query {
         "A simple type for getting started!"
         me: User!
-        todos: [Todo]!
     }
 
     type Mutation {
@@ -35,6 +34,7 @@ const typeDefs = gql`
         _id: ID!
         email: String!
         username: String!
+        todos: [Todo]
     }
 
     type Todo {
@@ -42,6 +42,7 @@ const typeDefs = gql`
         title: String!
         description: String!
         completed: Boolean!
+        createdBy: User!
         createdAt: String!
         updatedAt: String!
     }
