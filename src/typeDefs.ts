@@ -41,6 +41,7 @@ const typeDefs = gql`
         _id: ID!
         title: String!
         description: String!
+        completed: Boolean!
         createdAt: String!
         updatedAt: String!
     }
@@ -59,6 +60,7 @@ const typeDefs = gql`
     input TodoUpdateInput {
         title: String
         description: String
+        completed: Boolean
     }
 
     input LoginInput {

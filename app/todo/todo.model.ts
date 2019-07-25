@@ -4,6 +4,7 @@ export type TodoModel = Document & {
     user: string;
     title: string;
     description: string;
+    completed: boolean;
     createdAt: Date;
     updatedAt: Date;
 };
@@ -22,6 +23,10 @@ const todo = new Schema(
         description: {
             type: String,
             required: true
+        },
+        completed: {
+            type: Boolean,
+            default: false
         }
     },
     {

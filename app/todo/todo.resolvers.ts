@@ -55,7 +55,8 @@ export const updateTodo = authScope(
     async (__, { where, data }: TodoUpdateInput) => {
         const isTodoExists: TodoModel = await Todo.findOneAndUpdate(
             { _id: where._id },
-            data
+            data,
+            { new: true }
         )
             .select("-__v")
             .lean()
