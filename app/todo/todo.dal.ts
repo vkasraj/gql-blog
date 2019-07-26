@@ -15,6 +15,17 @@ export class TodoDAL {
         return todo;
     }
 
+    async findAll(options: DALOptions = {}): Promise<TodoModelType[]> {
+        const { select = this.select } = options;
+
+        const todos: TodoModelType[] = await TodoModel.find(this.ctx)
+            .select(select)
+            .lean()
+            .exec();
+
+        return todos;
+    }
+
     async findOne(options: DALOptions = {}): Promise<TodoModelType> {
         const { select = this.select } = options;
 
