@@ -1,6 +1,6 @@
 import { Schema, model, Document } from "mongoose";
 
-export type UserModel = Document & {
+export type UserModelType = Document & {
     username: string;
     email: string;
     password: string;
@@ -29,4 +29,4 @@ const user: Schema = new Schema(
     }
 );
 
-export default model<UserModel>("User", user);
+export const UserModel = model<UserModelType>("User", user);

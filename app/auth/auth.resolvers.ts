@@ -1,4 +1,4 @@
-import User, { UserModel } from "../user/user.model";
+import { UserDAL } from "./../user/user.dal";
 import TokenUtil from "../../utils/token.util";
 import { deleteProps } from "../../utils/object.util";
 import PasswordUtil from "../../utils/password.util";
@@ -20,15 +20,12 @@ interface Login {
 export const login = async (__: object, { data }: Login) => {
     const { email, password } = data;
 
-    const isUserExists = await User.findOne({
-        email
-    })
-        .select("-__v -createdAt -updatedAt")
-        .lean()
-        .exec();
+    const isUserExists = await new UserDAL({ email }).findOne({
+        select: "-__v -createdAt -updatedAt"
+    });
 
     if (!isUserExists) {
-        return new Error("Invalid email or password");
+        throw new Error("Invalid email or password");
     }
 
     const isPwMatched = await new PasswordUtil(password).verify(
@@ -36,8 +33,10 @@ export const login = async (__: object, { data }: Login) => {
     );
 
     if (!isPwMatched) {
-        return new Error("Invalid email or password");
+        throw new Error("Invalid email or password");
     }
+
+    deleteProps(isUserExists, ["password"]);
 
     const token = new TokenUtil({
         ID: isUserExists._id
@@ -52,37 +51,29 @@ export const login = async (__: object, { data }: Login) => {
 export const signup = async (__: object, { data }: Signup) => {
     const { username, email, password } = data;
 
-    const isUserExists = await User.findOne({
+    const isUserExists = await new UserDAL({
         $or: [{ username }, { email }]
-    })
-        .select("username email")
-        .lean()
-        .exec();
+    }).findOne({
+        select: "username email"
+    });
 
     if (isUserExists) {
         const msg = (type: string) => `User already exists with this ${type}`;
 
         if (isUserExists.email === email) {
-            return new Error(msg("email"));
+            throw new Error(msg("email"));
         }
 
-        return new Error(msg("username"));
+        throw new Error(msg("username"));
     }
 
     const hashed = await new PasswordUtil(password).hash();
 
-    const doc = await new User({
+    const user = await new UserDAL({
         username,
         email,
         password: hashed
-    }).save();
-
-    const user: UserModel = deleteProps(doc.toObject(), [
-        "password",
-        "__v",
-        "createdAt",
-        "updatedAt"
-    ]);
+    }).create();
 
     const token = new TokenUtil({
         ID: user._id
