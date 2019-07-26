@@ -19,6 +19,7 @@ interface TodoUpdateInput extends FindInput {
     data: {
         title?: string;
         description?: string;
+        completed?: boolean;
     };
 }
 
