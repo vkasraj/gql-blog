@@ -7,16 +7,16 @@ interface Context {
     };
 }
 
-export const authScope = (
+export const authScope = <T extends object>(
     role: "user" | "admin",
     cb: (parent: any, data: any, context: Context, info: any) => any
-) => (parent: any, data: any, context: Context, info: any) => {
+) => (parent: any, data: any, context: Context, info: any): T => {
     if (!context.USER) {
         throw new ForbiddenError("Authentication required! Please login.");
     }
 
     if (!context.USER.ROLE.includes(role)) {
-        return new AuthenticationError(
+        throw new AuthenticationError(
             "You are not authorized to perform this action."
         );
     }

@@ -1,12 +1,12 @@
 import { UserModel, UserModelType } from "./user.model";
 import { deleteProps } from "../../utils/object.util";
 
-interface Options {
+export interface DALOptions {
     select?: string;
 }
 
 export class UserDAL {
-    select: string = "-password -__v -createdAt -updatedAt";
+    private select: string = "-password -__v -createdAt -updatedAt";
 
     constructor(private ctx = {}) {}
 
@@ -23,7 +23,7 @@ export class UserDAL {
         ]);
     }
 
-    async findOne(options: Options = {}): Promise<UserModelType> {
+    async findOne(options: DALOptions = {}): Promise<UserModelType> {
         const { select = this.select } = options;
 
         const user: UserModelType = await UserModel.findOne(this.ctx)

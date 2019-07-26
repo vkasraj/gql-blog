@@ -1,6 +1,6 @@
 import { Schema, SchemaTypes, Document, model } from "mongoose";
 
-export type TodoModel = Document & {
+export type TodoModelType = Document & {
     user: string;
     title: string;
     description: string;
@@ -35,4 +35,4 @@ const todo = new Schema(
     }
 );
 
-export default model<TodoModel>("Todo", todo);
+export const TodoModel = model<TodoModelType>("Todo", todo);

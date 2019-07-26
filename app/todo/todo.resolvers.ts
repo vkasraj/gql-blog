@@ -1,6 +1,5 @@
-import Todo, { TodoModel } from "./todo.model";
-import { deleteProps } from "../../utils/object.util";
 import { authScope } from "../../utils/authScope.utils";
+import { TodoDAL } from "./todo.dal";
 
 interface TodoCreateInput {
     data: {
@@ -28,32 +27,25 @@ export const createTodo = authScope(
     async (__, { data }: TodoCreateInput, { USER }) => {
         const { title, description } = data;
 
-        const doc = await new Todo({
+        const doc = await new TodoDAL({
             user: USER.ID,
             title,
             description
-        }).save();
+        }).create();
 
-        const todo: TodoModel = deleteProps(doc.toObject(), ["__v"]);
-
-        return todo;
+        return doc;
     }
 );
 
 export const updateTodo = authScope(
     "user",
     async (__, { where, data }: TodoUpdateInput) => {
-        const isTodoExists: TodoModel = await Todo.findOneAndUpdate(
-            { _id: where._id },
-            data,
-            { new: true }
-        )
-            .select("-__v")
-            .lean()
-            .exec();
+        const isTodoExists = await new TodoDAL({ _id: where._id }).updateOne(
+            data
+        );
 
         if (!isTodoExists) {
-            return new Error(
+            throw new Error(
                 "Unable to update todo with this _id as it doesn't exists"
             );
         }
@@ -65,15 +57,12 @@ export const updateTodo = authScope(
 export const deleteTodo = authScope(
     "user",
     async (__, { where }: FindInput) => {
-        const isTodoExists: TodoModel = await Todo.findOneAndDelete({
+        const isTodoExists = await new TodoDAL({
             _id: where._id
-        })
-            .select("-__v")
-            .lean()
-            .exec();
+        }).deleteOne();
 
         if (!isTodoExists) {
-            return new Error(
+            throw new Error(
                 "Unable to delete todo with this _id as it doesn't exists"
             );
         }
