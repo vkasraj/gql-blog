@@ -22,6 +22,22 @@ interface TodoUpdateInput extends FindInput {
     };
 }
 
+export const todo = authScope(
+    "user",
+    async (_, { where }: FindInput, { USER }) => {
+        const todo = await new TodoDAL({
+            _id: where._id,
+            user: USER.ID
+        }).findOne();
+
+        if (!todo) {
+            throw new Error("Todo doesn't exists with this _id");
+        }
+
+        return todo;
+    }
+);
+
 export const todos = authScope("user", async (_, __, { USER }) => {
     const todos = await new TodoDAL({
         user: USER.ID

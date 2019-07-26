@@ -1,4 +1,4 @@
-import { todos } from "./../app/todo/todo.resolvers";
+import { todos, todo } from "./../app/todo/todo.resolvers";
 import { me } from "../app/user/user.resolvers";
 
-export const Query = { me, todos };
+export const Query = { me, todos, todo };

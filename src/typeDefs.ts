@@ -8,6 +8,7 @@ const typeDefs = gql`
         "A simple type for getting started!"
         me: User!
         todos: [Todo]!
+        todo(where: FindInput!): Todo
     }
 
     type Mutation {
