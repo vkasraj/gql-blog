@@ -26,9 +26,7 @@ const typeDefs = gql`
     # ===== Object Types =====
 
     type AuthPayload {
-        _id: ID!
-        email: String!
-        username: String!
+        user: User!
         token: String!
     }
 

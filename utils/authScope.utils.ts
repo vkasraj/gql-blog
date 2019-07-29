@@ -1,3 +1,4 @@
+import { ResolverFn } from "./../generated/graphql";
 import { AuthenticationError, ForbiddenError } from "apollo-server";
 
 interface Context {
@@ -7,10 +8,15 @@ interface Context {
     };
 }
 
-export const authScope = <T extends object>(
-    role: "user" | "admin",
-    cb: (parent: any, data: any, context: Context, info: any) => any
-) => (parent: any, data: any, context: Context, info: any): T => {
+type role = "user" | "admin";
+type cb = ResolverFn<any, any, Context, any>;
+
+export const authScope = (role: role, cb: cb) => (
+    parent: any,
+    data: any,
+    context: Context,
+    info: any
+) => {
     if (!context.USER) {
         throw new ForbiddenError("Authentication required! Please login.");
     }

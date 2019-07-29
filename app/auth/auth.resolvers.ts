@@ -2,22 +2,9 @@ import { UserDAL } from "./../user/user.dal";
 import TokenUtil from "../../utils/token.util";
 import { deleteProps } from "../../utils/object.util";
 import PasswordUtil from "../../utils/password.util";
+import { MutationLoginArgs, MutationSignupArgs } from "../../generated/graphql";
 
-interface Signup {
-    data: {
-        username: string;
-        email: string;
-        password: string;
-    };
-}
-interface Login {
-    data: {
-        email: string;
-        password: string;
-    };
-}
-
-export const login = async (__: object, { data }: Login) => {
+export const login = async (__: object, { data }: MutationLoginArgs) => {
     const { email, password } = data;
 
     const isUserExists = await new UserDAL({ email }).findOne({
@@ -43,12 +30,12 @@ export const login = async (__: object, { data }: Login) => {
     }).generate();
 
     return {
-        ...isUserExists,
+        user: isUserExists,
         token
     };
 };
 
-export const signup = async (__: object, { data }: Signup) => {
+export const signup = async (__: object, { data }: MutationSignupArgs) => {
     const { username, email, password } = data;
 
     const isUserExists = await new UserDAL({
@@ -80,7 +67,7 @@ export const signup = async (__: object, { data }: Signup) => {
     }).generate();
 
     return {
-        ...user,
+        user,
         token
     };
 };

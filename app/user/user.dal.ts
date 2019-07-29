@@ -1,9 +1,6 @@
+import { DALOptions } from "../../local.types";
 import { UserModel, UserModelType } from "./user.model";
 import { deleteProps } from "../../utils/object.util";
-
-export interface DALOptions {
-    select?: string;
-}
 
 export class UserDAL {
     private select: string = "-password -__v -createdAt -updatedAt";

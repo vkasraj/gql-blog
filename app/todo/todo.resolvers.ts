@@ -1,30 +1,15 @@
 import { authScope } from "../../utils/authScope.utils";
 import { TodoDAL } from "./todo.dal";
-
-interface TodoCreateInput {
-    data: {
-        title: string;
-        description: string;
-    };
-}
-
-interface FindInput {
-    where: {
-        _id: string;
-    };
-}
-
-interface TodoUpdateInput extends FindInput {
-    data: {
-        title?: string;
-        description?: string;
-        completed?: boolean;
-    };
-}
+import {
+    QueryTodoArgs,
+    MutationCreateTodoArgs,
+    MutationUpdateTodoArgs,
+    MutationDeleteTodoArgs
+} from "../../generated/graphql";
 
 export const todo = authScope(
     "user",
-    async (_, { where }: FindInput, { USER }) => {
+    async (_, { where }: QueryTodoArgs, { USER }) => {
         const todo = await new TodoDAL({
             _id: where._id,
             user: USER.ID
@@ -48,7 +33,7 @@ export const todos = authScope("user", async (_, __, { USER }) => {
 
 export const createTodo = authScope(
     "user",
-    async (__, { data }: TodoCreateInput, { USER }) => {
+    async (__, { data }: MutationCreateTodoArgs, { USER }) => {
         const { title, description } = data;
 
         const doc = await new TodoDAL({
@@ -63,7 +48,7 @@ export const createTodo = authScope(
 
 export const updateTodo = authScope(
     "user",
-    async (__, { where, data }: TodoUpdateInput) => {
+    async (__, { where, data }: MutationUpdateTodoArgs) => {
         const isTodoExists = await new TodoDAL({ _id: where._id }).updateOne(
             data
         );
@@ -80,7 +65,7 @@ export const updateTodo = authScope(
 
 export const deleteTodo = authScope(
     "user",
-    async (__, { where }: FindInput) => {
+    async (__, { where }: MutationDeleteTodoArgs) => {
         const isTodoExists = await new TodoDAL({
             _id: where._id
         }).deleteOne();

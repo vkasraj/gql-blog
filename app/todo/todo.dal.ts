@@ -1,4 +1,4 @@
-import { DALOptions } from "./../user/user.dal";
+import { DALOptions } from "../../local.types";
 import { TodoModelType, TodoModel } from "./todo.model";
 import { deleteProps } from "../../utils/object.util";
 
