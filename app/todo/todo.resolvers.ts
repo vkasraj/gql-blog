@@ -4,12 +4,13 @@ import {
     QueryTodoArgs,
     MutationCreateTodoArgs,
     MutationUpdateTodoArgs,
-    MutationDeleteTodoArgs
+    MutationDeleteTodoArgs,
+    Todo
 } from "../../generated/graphql";
 
 export const todo = authScope(
     "user",
-    async (_, { where }: QueryTodoArgs, { USER }) => {
+    async (_, { where }: QueryTodoArgs, { USER }): Promise<Todo> => {
         const todo = await new TodoDAL({
             _id: where._id,
             user: USER.ID
@@ -23,32 +24,35 @@ export const todo = authScope(
     }
 );
 
-export const todos = authScope("user", async (_, __, { USER }) => {
-    const todos = await new TodoDAL({
-        user: USER.ID
-    }).findAll();
+export const todos = authScope(
+    "user",
+    async (_, __, { USER }): Promise<Todo[]> => {
+        const todos = await new TodoDAL({
+            user: USER.ID
+        }).findAll();
 
-    return todos;
-});
+        return todos;
+    }
+);
 
 export const createTodo = authScope(
     "user",
-    async (__, { data }: MutationCreateTodoArgs, { USER }) => {
+    async (__, { data }: MutationCreateTodoArgs, { USER }): Promise<Todo> => {
         const { title, description } = data;
 
-        const doc = await new TodoDAL({
+        const todo = await new TodoDAL({
             user: USER.ID,
             title,
             description
         }).create();
 
-        return doc;
+        return todo;
     }
 );
 
 export const updateTodo = authScope(
     "user",
-    async (__, { where, data }: MutationUpdateTodoArgs) => {
+    async (__, { where, data }: MutationUpdateTodoArgs): Promise<Todo> => {
         const isTodoExists = await new TodoDAL({ _id: where._id }).updateOne(
             data
         );
@@ -65,7 +69,7 @@ export const updateTodo = authScope(
 
 export const deleteTodo = authScope(
     "user",
-    async (__, { where }: MutationDeleteTodoArgs) => {
+    async (__, { where }: MutationDeleteTodoArgs): Promise<Todo> => {
         const isTodoExists = await new TodoDAL({
             _id: where._id
         }).deleteOne();

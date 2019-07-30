@@ -11,12 +11,13 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Date: any;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
 
-export type AuthPayload = {
-  __typename?: "AuthPayload";
+export type AuthResponse = {
+  __typename?: "AuthResponse";
   user: User;
   token: Scalars["String"];
 };
@@ -38,8 +39,8 @@ export type LoginInput = {
 export type Mutation = {
   __typename?: "Mutation";
   /** This is the description */
-  login: AuthPayload;
-  signup: AuthPayload;
+  login: AuthResponse;
+  signup: AuthResponse;
   createTodo: Todo;
   updateTodo: Todo;
   deleteTodo: Todo;
@@ -91,8 +92,8 @@ export type Todo = {
   description: Scalars["String"];
   completed: Scalars["Boolean"];
   createdBy: User;
-  createdAt: Scalars["String"];
-  updatedAt: Scalars["String"];
+  createdAt: Scalars["Date"];
+  updatedAt: Scalars["Date"];
 };
 
 export type TodoCreateInput = {
@@ -190,10 +191,11 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars["String"]>;
   Todo: ResolverTypeWrapper<Todo>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
+  Date: ResolverTypeWrapper<Scalars["Date"]>;
   FindInput: FindInput;
   Mutation: ResolverTypeWrapper<{}>;
   LoginInput: LoginInput;
-  AuthPayload: ResolverTypeWrapper<AuthPayload>;
+  AuthResponse: ResolverTypeWrapper<AuthResponse>;
   SignupInput: SignupInput;
   TodoCreateInput: TodoCreateInput;
   TodoUpdateInput: TodoUpdateInput;
@@ -210,10 +212,11 @@ export type ResolversParentTypes = {
   String: Scalars["String"];
   Todo: Todo;
   Boolean: Scalars["Boolean"];
+  Date: Scalars["Date"];
   FindInput: FindInput;
   Mutation: {};
   LoginInput: LoginInput;
-  AuthPayload: AuthPayload;
+  AuthResponse: AuthResponse;
   SignupInput: SignupInput;
   TodoCreateInput: TodoCreateInput;
   TodoUpdateInput: TodoUpdateInput;
@@ -232,26 +235,31 @@ export type CacheControlDirectiveResolver<
   }
 > = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
-export type AuthPayloadResolvers<
+export type AuthResponseResolvers<
   ContextType = any,
-  ParentType = ResolversParentTypes["AuthPayload"]
+  ParentType = ResolversParentTypes["AuthResponse"]
 > = {
   user?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
   token?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 };
+
+export interface DateScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes["Date"], any> {
+  name: "Date";
+}
 
 export type MutationResolvers<
   ContextType = any,
   ParentType = ResolversParentTypes["Mutation"]
 > = {
   login?: Resolver<
-    ResolversTypes["AuthPayload"],
+    ResolversTypes["AuthResponse"],
     ParentType,
     ContextType,
     MutationLoginArgs
   >;
   signup?: Resolver<
-    ResolversTypes["AuthPayload"],
+    ResolversTypes["AuthResponse"],
     ParentType,
     ContextType,
     MutationSignupArgs
@@ -303,8 +311,8 @@ export type TodoResolvers<
   description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   completed?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   createdBy?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes["Date"], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes["Date"], ParentType, ContextType>;
 };
 
 export interface UploadScalarConfig
@@ -322,7 +330,8 @@ export type UserResolvers<
 };
 
 export type Resolvers<ContextType = any> = {
-  AuthPayload?: AuthPayloadResolvers<ContextType>;
+  AuthResponse?: AuthResponseResolvers<ContextType>;
+  Date?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Todo?: TodoResolvers<ContextType>;

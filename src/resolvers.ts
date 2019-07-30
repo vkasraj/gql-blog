@@ -1,6 +1,6 @@
-import { Todo } from "./../types/Todo";
-import { Query } from "../types/Query";
-import { Mutation } from "../types/Mutation";
+import { Todo } from "../root/Todo";
+import { Query } from "../root/Query";
+import { Mutation } from "../root/Mutation";
 
 const resolvers = {
     Query,

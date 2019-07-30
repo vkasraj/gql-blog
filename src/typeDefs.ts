@@ -3,6 +3,7 @@ import { gql } from "apollo-server";
 // The GraphQL schema
 const typeDefs = gql`
     # ===== Resolvers =====
+    scalar Date
 
     type Query {
         "A simple type for getting started!"
@@ -16,8 +17,8 @@ const typeDefs = gql`
         """
         This is the description
         """
-        login(data: LoginInput!): AuthPayload!
-        signup(data: SignupInput!): AuthPayload!
+        login(data: LoginInput!): AuthResponse!
+        signup(data: SignupInput!): AuthResponse!
         createTodo(data: TodoCreateInput!): Todo!
         updateTodo(where: FindInput!, data: TodoUpdateInput!): Todo!
         deleteTodo(where: FindInput!): Todo!
@@ -25,7 +26,7 @@ const typeDefs = gql`
 
     # ===== Object Types =====
 
-    type AuthPayload {
+    type AuthResponse {
         user: User!
         token: String!
     }
@@ -42,8 +43,8 @@ const typeDefs = gql`
         description: String!
         completed: Boolean!
         createdBy: User!
-        createdAt: String!
-        updatedAt: String!
+        createdAt: Date!
+        updatedAt: Date!
     }
 
     # ===== Input Types =====

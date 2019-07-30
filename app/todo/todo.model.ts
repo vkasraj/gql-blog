@@ -1,13 +1,7 @@
+import { Todo } from "../../generated/graphql";
 import { Schema, SchemaTypes, Document, model } from "mongoose";
 
-export type TodoModelType = Document & {
-    user: string;
-    title: string;
-    description: string;
-    completed: boolean;
-    createdAt: Date;
-    updatedAt: Date;
-};
+export type TodoModelType = Document & Todo;
 
 const todo = new Schema(
     {

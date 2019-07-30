@@ -205,7 +205,7 @@
             "type": {
               "kind": "NON_NULL",
               "name": null,
-              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+              "ofType": { "kind": "SCALAR", "name": "Date", "ofType": null }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -217,7 +217,7 @@
             "type": {
               "kind": "NON_NULL",
               "name": null,
-              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+              "ofType": { "kind": "SCALAR", "name": "Date", "ofType": null }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -232,6 +232,16 @@
         "kind": "SCALAR",
         "name": "Boolean",
         "description": "The `Boolean` scalar type represents `true` or `false`.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "Date",
+        "description": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -288,7 +298,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "AuthPayload",
+                "name": "AuthResponse",
                 "ofType": null
               }
             },
@@ -319,7 +329,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "AuthPayload",
+                "name": "AuthResponse",
                 "ofType": null
               }
             },
@@ -460,7 +470,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "AuthPayload",
+        "name": "AuthResponse",
         "description": null,
         "fields": [
           {
