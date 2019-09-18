@@ -3,6 +3,7 @@ import {
     MutationSignupArgs,
     AuthResponse
 } from "../../generated/graphql";
+import { Roles } from "../../@types/types";
 import { UserDAL } from "./../user/user.dal";
 import TokenUtil from "../../utils/token.util";
 import { deleteProps } from "../../utils/object.util";
@@ -33,7 +34,8 @@ export const login = async (
     deleteProps(isUserExists, ["password"]);
 
     const token = new TokenUtil({
-        ID: isUserExists._id
+        ID: isUserExists._id,
+        ROLE: Roles.USER
     }).generate();
 
     return {
@@ -73,7 +75,8 @@ export const signup = async (
     }).create();
 
     const token = new TokenUtil({
-        ID: user._id
+        ID: user._id,
+        ROLE: Roles.USER
     }).generate();
 
     return {

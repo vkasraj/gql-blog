@@ -1,17 +1,14 @@
 import { ResolverFn } from "./../generated/graphql";
 import { AuthenticationError, ForbiddenError } from "apollo-server";
+import { Roles, TokenPayload } from "../@types/types";
 
 interface Context {
-    USER: {
-        ID: string;
-        ROLE: string[];
-    };
+    USER: TokenPayload;
 }
 
-type role = "user" | "admin";
-type cb = ResolverFn<any, any, Context, any>;
+type callback = ResolverFn<any, any, Context, any>;
 
-export const authScope = (role: role, cb: cb) => (
+export const authScope = (roles: Roles[], cb: callback) => (
     parent: any,
     data: any,
     context: Context,
@@ -21,7 +18,10 @@ export const authScope = (role: role, cb: cb) => (
         throw new ForbiddenError("Authentication required! Please login.");
     }
 
-    if (!context.USER.ROLE.includes(role)) {
+    const { ROLE } = context.USER;
+    const rolesSet = new Set(roles);
+
+    if (!rolesSet.has(ROLE)) {
         throw new AuthenticationError(
             "You are not authorized to perform this action."
         );

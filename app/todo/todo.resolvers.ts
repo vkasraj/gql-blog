@@ -1,3 +1,4 @@
+import { Roles } from "../../@types/types";
 import { authScope } from "../../utils/authScope.utils";
 import { TodoDAL } from "./todo.dal";
 import {
@@ -9,7 +10,7 @@ import {
 } from "../../generated/graphql";
 
 export const todo = authScope(
-    "user",
+    [Roles.USER],
     async (_, { where }: QueryTodoArgs, { USER }): Promise<Todo> => {
         const todo = await new TodoDAL({
             _id: where._id,
@@ -25,7 +26,7 @@ export const todo = authScope(
 );
 
 export const todos = authScope(
-    "user",
+    [Roles.USER],
     async (_, __, { USER }): Promise<Todo[]> => {
         const todos = await new TodoDAL({
             user: USER.ID
@@ -36,7 +37,7 @@ export const todos = authScope(
 );
 
 export const createTodo = authScope(
-    "user",
+    [Roles.USER],
     async (__, { data }: MutationCreateTodoArgs, { USER }): Promise<Todo> => {
         const { title, description } = data;
 
@@ -51,7 +52,7 @@ export const createTodo = authScope(
 );
 
 export const updateTodo = authScope(
-    "user",
+    [Roles.USER],
     async (__, { where, data }: MutationUpdateTodoArgs): Promise<Todo> => {
         const isTodoExists = await new TodoDAL({ _id: where._id }).updateOne(
             data
@@ -68,7 +69,7 @@ export const updateTodo = authScope(
 );
 
 export const deleteTodo = authScope(
-    "user",
+    [Roles.USER],
     async (__, { where }: MutationDeleteTodoArgs): Promise<Todo> => {
         const isTodoExists = await new TodoDAL({
             _id: where._id

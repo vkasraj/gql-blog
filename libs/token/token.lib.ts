@@ -1,23 +1,17 @@
 import jwt from "jsonwebtoken";
+import { TokenPayload } from "../../@types/types";
 
-interface TokGenerate {
+interface TokenGeneratePayload {
     secret: string;
     exp: string | number;
-    payload: {
-        ROLE: ["user" | "admin"];
-        [key: string]: any;
-    };
+    payload: TokenPayload;
 }
 
-/**
- * For generating Buffer from token payload
- */
+// For generating Buffer from token payload
 const genBuff = (secret: string): Buffer => Buffer.from(secret, "base64");
 
-/**
- * Common function for generating token
- */
-export const generate = ({ secret, exp, payload }: TokGenerate) => {
+// Common function for generating token
+export const generate = ({ secret, exp, payload }: TokenGeneratePayload) => {
     const $secret = genBuff(secret);
 
     return jwt.sign(payload, $secret, {
@@ -26,9 +20,7 @@ export const generate = ({ secret, exp, payload }: TokGenerate) => {
     });
 };
 
-/**
- * Common function for verifying token
- */
+// Common function for verifying token
 export const verify = (secret: string, token: string) => {
     const $secret = genBuff(secret);
 

@@ -1,4 +1,4 @@
-import { DALOptions } from "../../@types/dal.types";
+import { DALOptions } from "../../@types/types";
 import { UserModel, UserModelType } from "./user.model";
 import { deleteProps } from "../../utils/object.util";
 

@@ -1,9 +1,10 @@
 import { AuthenticationError } from "apollo-server";
+import { TokenPayload } from "../@types/types";
 import { generate, verify } from "../libs/token/token.lib";
 import keys from "../config/keys";
 
 export default class TokenGenerator {
-    constructor(private ctx: {}) {}
+    constructor(private ctx: TokenPayload) {}
 
     // For generating access token
     generate(): string {
@@ -11,10 +12,7 @@ export default class TokenGenerator {
             const accessToken = generate({
                 secret: keys.TOKEN.KEY,
                 exp: keys.TOKEN.EXP,
-                payload: {
-                    ...this.ctx,
-                    ROLE: ["user"]
-                }
+                payload: this.ctx
             });
 
             return accessToken;
