@@ -1,10 +1,13 @@
-const keys: any = {
-    PORT: process.env.PORT,
-    MONGO_URI: process.env.MONGO_URI,
-    TOKEN: {
-        KEY: process.env.TOKEN_KEY,
-        EXP: process.env.TOKEN_EXP
-    }
+declare var process: {
+    env: {
+        NODE_ENV: string;
+        PORT: string;
+        MONGO_URI: string;
+        TOKEN_KEY: string;
+        TOKEN_EXP: string | number;
+    };
 };
 
-export default keys;
+export const { NODE_ENV, PORT, MONGO_URI, TOKEN_KEY, TOKEN_EXP } = process.env;
+
+export const isDev = NODE_ENV !== "production";
