@@ -5,7 +5,7 @@ export type TodoModelType = Document & Todo;
 
 const todo = new Schema(
     {
-        user: {
+        userID: {
             type: SchemaTypes.ObjectId,
             ref: "User",
             required: true
