@@ -1,6 +1,7 @@
 export interface DALOptions {
     select?: string;
     sort?: object;
+    upsert?: boolean;
 }
 
 export enum Roles {

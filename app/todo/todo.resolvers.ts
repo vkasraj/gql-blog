@@ -14,7 +14,7 @@ export const todo = authScope(
     async (_, { where }: QueryTodoArgs, { USER }): Promise<Todo> => {
         const todo = await new TodoDAL({
             _id: where._id,
-            user: USER.ID
+            userID: USER.ID
         }).findOne();
 
         if (!todo) {
@@ -29,7 +29,7 @@ export const todos = authScope(
     [Roles.USER],
     async (_, __, { USER }): Promise<Todo[]> => {
         const todos = await new TodoDAL({
-            user: USER.ID
+            userID: USER.ID
         }).findAll();
 
         return todos;
@@ -42,7 +42,7 @@ export const createTodo = authScope(
         const { title, description } = data;
 
         const todo = await new TodoDAL({
-            user: USER.ID,
+            userID: USER.ID,
             title,
             description
         }).create();
@@ -53,10 +53,15 @@ export const createTodo = authScope(
 
 export const updateTodo = authScope(
     [Roles.USER],
-    async (__, { where, data }: MutationUpdateTodoArgs): Promise<Todo> => {
-        const isTodoExists = await new TodoDAL({ _id: where._id }).updateOne(
-            data
-        );
+    async (
+        __,
+        { where, data }: MutationUpdateTodoArgs,
+        { USER }
+    ): Promise<Todo> => {
+        const isTodoExists = await new TodoDAL({
+            _id: where._id,
+            userID: USER.ID
+        }).updateOne(data);
 
         if (!isTodoExists) {
             throw new Error(
@@ -70,9 +75,10 @@ export const updateTodo = authScope(
 
 export const deleteTodo = authScope(
     [Roles.USER],
-    async (__, { where }: MutationDeleteTodoArgs): Promise<Todo> => {
+    async (__, { where }: MutationDeleteTodoArgs, { USER }): Promise<Todo> => {
         const isTodoExists = await new TodoDAL({
-            _id: where._id
+            _id: where._id,
+            userID: USER.ID
         }).deleteOne();
 
         if (!isTodoExists) {
