@@ -1,18 +1,23 @@
-import { ResolverFn } from "./../generated/graphql";
 import { AuthenticationError, ForbiddenError } from "apollo-server";
 import { Roles, TokenPayload } from "../@types/types";
+import { GraphQLFieldResolver } from "graphql";
 
 interface Context {
     USER: TokenPayload;
 }
 
-type callback = ResolverFn<any, any, Context, any>;
+type Resolver<T> = GraphQLFieldResolver<T, Context, any>;
 
-export const authScope = (roles: Roles[], cb: callback) => (
-    parent: any,
-    data: any,
-    context: Context,
-    info: any
+type AuthScope = <T extends object>(
+    roles: Roles[],
+    callback: Resolver<T>
+) => Resolver<T>;
+
+export const authScope: AuthScope = (roles, callback) => (
+    source,
+    args,
+    context,
+    info
 ) => {
     if (!context.USER) {
         throw new ForbiddenError("Authentication required! Please login.");
@@ -27,5 +32,5 @@ export const authScope = (roles: Roles[], cb: callback) => (
         );
     }
 
-    return cb(parent, data, context, info);
+    return callback(source, args, context, info);
 };
