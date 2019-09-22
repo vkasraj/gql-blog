@@ -1,79 +1,191 @@
-import { gql } from "apollo-server";
+import { objectType, arg, inputObjectType, scalarType } from "nexus";
+import { me } from "../app/user/user.resolvers";
+import { login, signup } from "../app/auth/auth.resolvers";
+import {
+    todo,
+    todos,
+    createTodo,
+    updateTodo,
+    deleteTodo
+} from "../app/todo/todo.resolvers";
+import { createdBy } from "../root/Todo";
 
-// The GraphQL schema
-const typeDefs = gql`
-    # ===== Resolvers =====
-    scalar Date
+scalarType({
+    name: "Date",
+    serialize: value => value.getTime(),
+    parseValue: value => new Date(value),
+    parseLiteral: ast => (ast.kind === "IntValue" ? new Date(ast.value) : null),
+    asNexusMethod: "date"
+});
 
-    type Query {
-        "A simple type for getting started!"
-        me: User!
-        todos: [Todo]!
-        todo(where: FindInput!): Todo
+export const User = objectType({
+    name: "User",
+    definition(t) {
+        t.id("_id");
+        t.string("email");
+        t.string("username");
     }
+});
 
-    type Mutation {
-        # This is a comment
-        """
-        This is the description
-        """
-        login(data: LoginInput!): AuthResponse!
-        signup(data: SignupInput!): AuthResponse!
-        createTodo(data: TodoCreateInput!): Todo!
-        updateTodo(where: FindInput!, data: TodoUpdateInput!): Todo!
-        deleteTodo(where: FindInput!): Todo!
+export const Todo = objectType({
+    name: "Todo",
+    definition(t) {
+        t.id("_id");
+        t.string("title");
+        t.string("description");
+        t.boolean("completed");
+        t.field("createdBy", {
+            type: User,
+            // @ts-ignore
+            resolve: createdBy
+        });
+        t.string("createdAt");
+        t.string("updatedAt");
     }
+});
 
-    # ===== Object Types =====
-
-    type AuthResponse {
-        user: User!
-        token: String!
+export const FindInput = inputObjectType({
+    name: "FindInput",
+    definition(t) {
+        t.id("_id", {
+            required: true
+        });
     }
+});
 
-    type User {
-        _id: ID!
-        email: String!
-        username: String!
+export const AuthResponse = objectType({
+    name: "AuthResponse",
+    definition(t) {
+        t.field("user", {
+            type: User
+        });
+        t.string("token");
     }
+});
 
-    type Todo {
-        _id: ID!
-        title: String!
-        description: String!
-        completed: Boolean!
-        createdBy: User!
-        createdAt: Date!
-        updatedAt: Date!
+export const LoginInput = inputObjectType({
+    name: "LoginInput",
+    definition(t) {
+        t.string("email", { required: true });
+        t.string("password", { required: true });
     }
+});
 
-    # ===== Input Types =====
-
-    input FindInput {
-        _id: ID!
+export const SignupInput = inputObjectType({
+    name: "SignupInput",
+    definition(t) {
+        t.string("email", { required: true });
+        t.string("username", { required: true });
+        t.string("password", { required: true });
     }
+});
 
-    input TodoCreateInput {
-        title: String!
-        description: String!
+export const TodoCreateInput = inputObjectType({
+    name: "TodoCreateInput",
+    definition(t) {
+        t.string("title", { required: true });
+        t.string("description", { required: true });
     }
+});
 
-    input TodoUpdateInput {
-        title: String
-        description: String
-        completed: Boolean
+export const TodoUpdateInput = inputObjectType({
+    name: "TodoUpdateInput",
+    definition(t) {
+        t.string("title");
+        t.string("description");
+        t.boolean("completed");
     }
+});
 
-    input LoginInput {
-        email: String!
-        password: String!
+export const Query = objectType({
+    name: "Query",
+    definition(t) {
+        t.field("me", {
+            type: User,
+            description: "Will return the current logged in user",
+            resolve: me
+        });
+
+        t.field("todos", {
+            type: Todo,
+            list: [false],
+            resolve: todos
+        });
+
+        t.field("todo", {
+            type: Todo,
+            nullable: true,
+            args: {
+                where: arg({
+                    type: FindInput,
+                    required: true
+                })
+            },
+            resolve: todo
+        });
     }
+});
 
-    input SignupInput {
-        username: String!
-        email: String!
-        password: String!
+export const Mutation = objectType({
+    name: "Mutation",
+    definition(t) {
+        t.field("login", {
+            type: AuthResponse,
+            args: {
+                data: arg({
+                    type: LoginInput,
+                    required: true
+                })
+            },
+            resolve: login
+        });
+
+        t.field("signup", {
+            type: AuthResponse,
+            args: {
+                data: arg({
+                    type: SignupInput,
+                    required: true
+                })
+            },
+            resolve: signup
+        });
+
+        t.field("createTodo", {
+            type: Todo,
+            args: {
+                data: arg({
+                    type: TodoCreateInput,
+                    required: true
+                })
+            },
+            resolve: createTodo
+        });
+
+        t.field("updateTodo", {
+            type: Todo,
+            args: {
+                where: arg({
+                    type: FindInput,
+                    required: true
+                }),
+                data: arg({
+                    type: TodoUpdateInput,
+                    required: true
+                })
+            },
+            resolve: updateTodo
+        });
+
+        t.field("deleteTodo", {
+            type: Todo,
+            args: {
+                where: arg({
+                    type: FindInput,
+                    required: true
+                })
+            },
+            resolve: deleteTodo
+        });
     }
-`;
-
-export default typeDefs;
+});

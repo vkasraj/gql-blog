@@ -1,20 +1,19 @@
 import { ApolloServer } from "apollo-server";
 import mongoose from "mongoose";
-import typeDefs from "../src/typeDefs";
-import resolvers from "../src/resolvers";
 import context from "../src/context";
 import { PORT, MONGO_URI } from "../config/keys";
+import { schema } from "../src/schema";
 
 const server = new ApolloServer({
-    typeDefs,
-    resolvers,
+    schema,
     context
 });
 
 mongoose
     .connect(MONGO_URI, {
         useNewUrlParser: true,
-        useFindAndModify: false
+        useFindAndModify: false,
+        useUnifiedTopology: true
     })
     .then(() => {
         console.log("[MONGO] >> Connected");
