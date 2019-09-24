@@ -51,6 +51,7 @@ export interface NexusGenRootTypes {
     description: string; // String!
     title: string; // String!
     updatedAt: string; // String!
+    userID: string; // String!
   }
   User: { // root type
     _id: string; // ID!
@@ -97,6 +98,7 @@ export interface NexusGenFieldTypes {
     description: string; // String!
     title: string; // String!
     updatedAt: string; // String!
+    userID: string; // String!
   }
   User: { // field return type
     _id: string; // ID!

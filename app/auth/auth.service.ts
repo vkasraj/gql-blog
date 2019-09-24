@@ -1,4 +1,3 @@
-import { Context } from "../../src/Context";
 import { LoginInput, SignupInput } from "../../generated/graphql";
 import { UserDAL } from "../user/user.dal";
 import TokenUtil from "../../utils/token.util";
@@ -7,8 +6,6 @@ import { deleteProps } from "../../utils/object.util";
 import { Roles } from "../../@types/types";
 
 export class AuthService {
-    constructor(private _: Context) {}
-
     async login(data: LoginInput) {
         const { email, password } = data;
 

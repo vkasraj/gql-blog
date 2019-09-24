@@ -45,6 +45,7 @@ type Todo {
   description: String!
   title: String!
   updatedAt: String!
+  userID: String!
 }
 
 input TodoCreateInput {

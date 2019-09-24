@@ -1,6 +1,4 @@
 import { objectType, arg, inputObjectType, scalarType } from "nexus";
-import { me } from "../app/user/user.resolvers";
-import { createdBy } from "../root/Todo";
 
 scalarType({
     name: "Date",
@@ -26,10 +24,12 @@ export const Todo = objectType({
         t.string("title");
         t.string("description");
         t.boolean("completed");
+        t.string("userID");
         t.field("createdBy", {
-            type: User,
-            // @ts-ignore
-            resolve: createdBy
+            type: "User",
+            resolve: ({ userID }, _, { userService }) => {
+                return userService.createdBy(userID);
+            }
         });
         t.string("createdAt");
         t.string("updatedAt");
@@ -49,7 +49,7 @@ export const AuthResponse = objectType({
     name: "AuthResponse",
     definition(t) {
         t.field("user", {
-            type: User
+            type: "User"
         });
         t.string("token");
     }
@@ -93,9 +93,9 @@ export const Query = objectType({
     name: "Query",
     definition(t) {
         t.field("me", {
-            type: User,
+            type: "User",
             description: "Will return the current logged in user",
-            resolve: me
+            resolve: (_, __, { userService }) => userService.me()
         });
 
         t.field("todos", {

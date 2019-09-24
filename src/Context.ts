@@ -4,10 +4,12 @@ import TokenGenerator from "../utils/token.util";
 import { TokenPayload } from "../@types/types";
 import { TodoService } from "../app/todo/todo.service";
 import { ForbiddenError } from "apollo-server";
+import { UserService } from "../app/user/user.service";
 
 export class Context {
-    authService = new AuthService(this);
+    authService = new AuthService();
     todoService = new TodoService(this);
+    userService = new UserService(this);
 
     constructor(private ctx: ExpressContext) {}
 
