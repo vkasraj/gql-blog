@@ -2,9 +2,12 @@ import { AuthService } from "../app/auth/auth.service";
 import { ExpressContext } from "apollo-server-express/dist/ApolloServer";
 import TokenGenerator from "../utils/token.util";
 import { TokenPayload } from "../@types/types";
+import { TodoService } from "../app/todo/todo.service";
+import { ForbiddenError } from "apollo-server";
 
 export class Context {
     authService = new AuthService(this);
+    todoService = new TodoService(this);
 
     constructor(private ctx: ExpressContext) {}
 
@@ -14,6 +17,10 @@ export class Context {
 
     get USER(): TokenPayload {
         const token = this.req.headers.authorization;
+
+        if (!token) {
+            throw new ForbiddenError("Authentication required! Please login.");
+        }
 
         return TokenGenerator.verify(token as string);
     }

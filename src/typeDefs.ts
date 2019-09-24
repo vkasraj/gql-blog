@@ -1,12 +1,5 @@
 import { objectType, arg, inputObjectType, scalarType } from "nexus";
 import { me } from "../app/user/user.resolvers";
-import {
-    todo,
-    todos,
-    createTodo,
-    updateTodo,
-    deleteTodo
-} from "../app/todo/todo.resolvers";
 import { createdBy } from "../root/Todo";
 
 scalarType({
@@ -106,13 +99,13 @@ export const Query = objectType({
         });
 
         t.field("todos", {
-            type: Todo,
+            type: "Todo",
             list: [false],
-            resolve: todos
+            resolve: (_, __, { todoService }) => todoService.todos()
         });
 
         t.field("todo", {
-            type: Todo,
+            type: "Todo",
             nullable: true,
             args: {
                 where: arg({
@@ -120,7 +113,9 @@ export const Query = objectType({
                     required: true
                 })
             },
-            resolve: todo
+            resolve: (_, { where }, { todoService }) => {
+                return todoService.todo(where._id);
+            }
         });
     }
 });
@@ -151,18 +146,20 @@ export const Mutation = objectType({
         });
 
         t.field("createTodo", {
-            type: Todo,
+            type: "Todo",
             args: {
                 data: arg({
                     type: TodoCreateInput,
                     required: true
                 })
             },
-            resolve: createTodo
+            resolve: (_, { data }, { todoService }) => {
+                return todoService.createTodo(data);
+            }
         });
 
         t.field("updateTodo", {
-            type: Todo,
+            type: "Todo",
             args: {
                 where: arg({
                     type: FindInput,
@@ -173,18 +170,22 @@ export const Mutation = objectType({
                     required: true
                 })
             },
-            resolve: updateTodo
+            resolve: (_, { where, data }, { todoService }) => {
+                return todoService.updateTodo(where._id, data);
+            }
         });
 
         t.field("deleteTodo", {
-            type: Todo,
+            type: "Todo",
             args: {
                 where: arg({
                     type: FindInput,
                     required: true
                 })
             },
-            resolve: deleteTodo
+            resolve: (_, { where }, { todoService }) => {
+                return todoService.deleteTodo(where._id);
+            }
         });
     }
 });
