@@ -29,5 +29,14 @@ export const schema = makeSchema({
     outputs: {
         schema: join(__dirname, "../generated/schema.graphql"),
         typegen: join(__dirname, "../generated/gql.types.d.ts")
+    },
+    typegenAutoConfig: {
+        contextType: "ctx.Context",
+        sources: [
+            {
+                alias: "ctx",
+                source: join(__dirname, "Context.ts")
+            }
+        ]
     }
 });

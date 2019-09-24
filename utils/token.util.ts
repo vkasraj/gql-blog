@@ -21,9 +21,9 @@ export default class TokenGenerator {
         }
     }
 
-    static verify(token: string) {
+    static verify(token: string): TokenPayload {
         try {
-            return verify(TOKEN_KEY, token);
+            return verify(TOKEN_KEY, token) as TokenPayload;
         } catch (error) {
             throw new AuthenticationError("Unauthorized Access! Please login");
         }

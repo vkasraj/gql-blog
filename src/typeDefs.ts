@@ -1,6 +1,5 @@
 import { objectType, arg, inputObjectType, scalarType } from "nexus";
 import { me } from "../app/user/user.resolvers";
-import { login, signup } from "../app/auth/auth.resolvers";
 import {
     todo,
     todos,
@@ -130,25 +129,25 @@ export const Mutation = objectType({
     name: "Mutation",
     definition(t) {
         t.field("login", {
-            type: AuthResponse,
+            type: "AuthResponse",
             args: {
                 data: arg({
                     type: LoginInput,
                     required: true
                 })
             },
-            resolve: login
+            resolve: (_, { data }, { authService }) => authService.login(data)
         });
 
         t.field("signup", {
-            type: AuthResponse,
+            type: "AuthResponse",
             args: {
                 data: arg({
                     type: SignupInput,
                     required: true
                 })
             },
-            resolve: signup
+            resolve: (_, { data }, { authService }) => authService.signup(data)
         });
 
         t.field("createTodo", {

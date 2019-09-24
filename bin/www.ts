@@ -1,12 +1,12 @@
 import { ApolloServer } from "apollo-server";
 import mongoose from "mongoose";
-import context from "../src/context";
 import { PORT, MONGO_URI } from "../config/keys";
 import { schema } from "../src/schema";
+import { Context } from "../src/Context";
 
 const server = new ApolloServer({
     schema,
-    context
+    context: ctx => new Context(ctx)
 });
 
 mongoose
