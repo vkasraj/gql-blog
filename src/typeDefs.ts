@@ -1,12 +1,7 @@
-import { objectType, arg, inputObjectType, scalarType } from "nexus";
+import { objectType, arg, inputObjectType, asNexusMethod } from "nexus";
+import { GraphQLDateTime } from "graphql-iso-date";
 
-scalarType({
-    name: "Date",
-    serialize: value => value.getTime(),
-    parseValue: value => new Date(value),
-    parseLiteral: ast => (ast.kind === "IntValue" ? new Date(ast.value) : null),
-    asNexusMethod: "date"
-});
+export const DateTime = asNexusMethod(GraphQLDateTime, "date");
 
 export const User = objectType({
     name: "User",
@@ -25,14 +20,18 @@ export const Todo = objectType({
         t.string("description");
         t.boolean("completed");
         t.string("userID");
+        t.field("createdAt", {
+            type: "DateTime"
+        });
+        t.field("updatedAt", {
+            type: "DateTime"
+        });
         t.field("createdBy", {
             type: "User",
             resolve: ({ userID }, _, { userService }) => {
                 return userService.createdBy(userID);
             }
         });
-        t.string("createdAt");
-        t.string("updatedAt");
     }
 });
 
