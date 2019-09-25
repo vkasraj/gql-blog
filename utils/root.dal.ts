@@ -2,7 +2,11 @@ import { Model, Document } from "mongoose";
 import { deleteProps } from "./object.util";
 import { DALOptions } from "../@types/types";
 
-export abstract class RootDAL<ModelType extends Document> {
+export abstract class RootDAL<
+    ModelType extends Document,
+    CreateType extends object,
+    ReturnType extends object
+> {
     private readonly select = "-__v";
     private readonly upsert = false;
 
@@ -11,14 +15,14 @@ export abstract class RootDAL<ModelType extends Document> {
         private readonly ctx: object
     ) {}
 
-    async create(): Promise<ModelType> {
-        const newDoc = await new this.Model(this.ctx).save();
+    async create(data: CreateType): Promise<ReturnType> {
+        const newDoc = await new this.Model(data).save();
         const doc = newDoc.toObject();
 
         return deleteProps(doc, ["__v"]);
     }
 
-    findOne(options: DALOptions = {}): Promise<ModelType> {
+    findOne(options: DALOptions = {}): Promise<ReturnType> {
         const { select = this.select } = options;
 
         return this.Model.findOne(this.ctx)
@@ -27,7 +31,7 @@ export abstract class RootDAL<ModelType extends Document> {
             .exec();
     }
 
-    findAll(options: DALOptions = {}): Promise<ModelType[]> {
+    findAll(options: DALOptions = {}): Promise<ReturnType[]> {
         const { select = this.select } = options;
 
         return this.Model.find(this.ctx)
@@ -36,7 +40,7 @@ export abstract class RootDAL<ModelType extends Document> {
             .exec();
     }
 
-    updateOne(data: object, options: DALOptions = {}): Promise<ModelType> {
+    updateOne(data: object, options: DALOptions = {}): Promise<ReturnType> {
         const { select = this.select, upsert = this.upsert } = options;
 
         return this.Model.findOneAndUpdate(this.ctx, data, {
@@ -48,7 +52,7 @@ export abstract class RootDAL<ModelType extends Document> {
             .exec();
     }
 
-    deleteOne(options: DALOptions = {}): Promise<ModelType> {
+    deleteOne(options: DALOptions = {}): Promise<ReturnType> {
         const { select = this.select } = options;
 
         return this.Model.findOneAndDelete(this.ctx)

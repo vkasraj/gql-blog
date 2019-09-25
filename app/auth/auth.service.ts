@@ -64,11 +64,11 @@ export class AuthService {
 
         const hashed = await new PasswordUtil(password).hash();
 
-        const user = await new UserDAL({
+        const user = await new UserDAL().create({
             username,
             email,
             password: hashed
-        }).create();
+        });
 
         const token = new TokenUtil({
             ID: user._id,
