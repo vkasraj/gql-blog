@@ -1,8 +1,10 @@
 import { join } from "path";
+import { ApolloServer } from "apollo-server";
 import { makeSchema } from "nexus";
-import * as allTypes from "./typeDefs";
+import * as allTypes from "./schema/index";
+import { Context } from "./Context";
 
-export const schema = makeSchema({
+const graphqlSchema = makeSchema({
     types: allTypes,
     outputs: {
         schema: join(__dirname, "../generated/schema.graphql"),
@@ -20,4 +22,9 @@ export const schema = makeSchema({
             DateTime: "Date"
         }
     }
+});
+
+export const server = new ApolloServer({
+    schema: graphqlSchema,
+    context: ctx => new Context(ctx)
 });

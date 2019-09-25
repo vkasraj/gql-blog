@@ -1,20 +1,8 @@
-import { ApolloServer } from "apollo-server";
-import mongoose from "mongoose";
 import { PORT, MONGO_URI } from "../config/keys";
-import { schema } from "../src/schema";
-import { Context } from "../src/Context";
+import { server } from "../src/server";
+import { db } from "../src/db";
 
-const server = new ApolloServer({
-    schema,
-    context: ctx => new Context(ctx)
-});
-
-mongoose
-    .connect(MONGO_URI, {
-        useNewUrlParser: true,
-        useFindAndModify: false,
-        useUnifiedTopology: true
-    })
+db(MONGO_URI)
     .then(() => {
         console.log("[MONGO] >> Connected");
 
@@ -29,3 +17,28 @@ mongoose
     .catch((error: Error) => {
         throw error;
     });
+
+const errorHandler = (
+    error: {} | Error | undefined | null,
+    event: string
+): never => {
+    if (error) {
+        throw new Error(`>> [EXIT]:{SERVER} \n${error}`);
+    }
+
+    throw new Error(`${event} caught`);
+};
+
+process.on("beforeExit", () => errorHandler(null, "beforeExit"));
+process.on("exit", () => errorHandler(null, "exit"));
+
+process.on("unhandledRejection", error => {
+    errorHandler(error, "unhandledRejection");
+});
+process.on("uncaughtException", error =>
+    errorHandler(error, "uncaughtException")
+);
+
+process.on("SIGINT", () => errorHandler(null, "SIGINT"));
+process.on("SIGQUIT", () => errorHandler(null, "SIGQUIT"));
+process.on("SIGTERM", () => errorHandler(null, "SIGTERM"));
