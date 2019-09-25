@@ -1,6 +1,6 @@
+import { NexusGenRootTypes, NexusGenInputs } from "../../generated/gql.types";
 import { Context } from "../../src/Context";
 import { TodoDAL } from "./todo.dal";
-import { TodoCreateInput, TodoUpdateInput } from "../../generated/graphql";
 
 export class TodoService {
     constructor(private ctx: Context) {}
@@ -9,13 +9,13 @@ export class TodoService {
         return this.ctx.USER.ID;
     }
 
-    todos() {
+    todos(): Promise<NexusGenRootTypes["Todo"][]> {
         return new TodoDAL({
             userID: this.ID
         }).findAll();
     }
 
-    async todo(_id: string) {
+    async todo(_id: string): Promise<NexusGenRootTypes["Todo"]> {
         const todo = await new TodoDAL({
             _id,
             userID: this.ID
@@ -28,7 +28,9 @@ export class TodoService {
         return todo;
     }
 
-    createTodo(data: TodoCreateInput) {
+    createTodo(
+        data: NexusGenInputs["TodoCreateInput"]
+    ): Promise<NexusGenRootTypes["Todo"]> {
         const { title, description } = data;
 
         return new TodoDAL({
@@ -38,7 +40,10 @@ export class TodoService {
         }).create();
     }
 
-    async updateTodo(_id: string, data: TodoUpdateInput) {
+    async updateTodo(
+        _id: string,
+        data: NexusGenInputs["TodoUpdateInput"]
+    ): Promise<NexusGenRootTypes["Todo"]> {
         const isTodoExists = await new TodoDAL({
             _id,
             userID: this.ID
@@ -53,7 +58,7 @@ export class TodoService {
         return isTodoExists;
     }
 
-    async deleteTodo(_id: string) {
+    async deleteTodo(_id: string): Promise<NexusGenRootTypes["Todo"]> {
         const isTodoExists = await new TodoDAL({
             _id,
             userID: this.ID

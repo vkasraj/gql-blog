@@ -1,12 +1,14 @@
-import { LoginInput, SignupInput } from "../../generated/graphql";
 import { UserDAL } from "../user/user.dal";
 import TokenUtil from "../../utils/token.util";
 import PasswordUtil from "../../utils/password.util";
 import { deleteProps } from "../../utils/object.util";
 import { Roles } from "../../@types/types";
+import { NexusGenInputs, NexusGenRootTypes } from "../../generated/gql.types";
 
 export class AuthService {
-    async login(data: LoginInput) {
+    async login(
+        data: NexusGenInputs["LoginInput"]
+    ): Promise<NexusGenRootTypes["AuthResponse"]> {
         const { email, password } = data;
 
         const isUserExists = await new UserDAL({ email }).findOne({
@@ -18,7 +20,7 @@ export class AuthService {
         }
 
         const isPwMatched = await new PasswordUtil(password).verify(
-            isUserExists.password
+            isUserExists.password as string
         );
 
         if (!isPwMatched) {
@@ -38,7 +40,9 @@ export class AuthService {
         };
     }
 
-    async signup(data: SignupInput) {
+    async signup(
+        data: NexusGenInputs["SignupInput"]
+    ): Promise<NexusGenRootTypes["AuthResponse"]> {
         const { username, email, password } = data;
 
         const isUserExists = await new UserDAL({

@@ -1,12 +1,10 @@
 import { Schema, model, Document } from "mongoose";
+import { NexusGenRootTypes } from "../../generated/gql.types";
 
-export type UserModelType = Document & {
-    username: string;
-    email: string;
-    password: string;
-    createdAt: Date;
-    updatedAt: Date;
-};
+export type UserModelType = Document &
+    NexusGenRootTypes["User"] & {
+        password?: string;
+    };
 
 const user: Schema = new Schema(
     {

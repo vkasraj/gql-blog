@@ -1,5 +1,6 @@
 import { Context } from "../../src/Context";
 import { UserDAL } from "./user.dal";
+import { NexusGenRootTypes } from "../../generated/gql.types";
 
 export class UserService {
     constructor(private ctx: Context) {}
@@ -8,11 +9,11 @@ export class UserService {
         return this.ctx.USER.ID;
     }
 
-    me() {
+    me(): Promise<NexusGenRootTypes["User"]> {
         return new UserDAL({ _id: this.ID }).findOne();
     }
 
-    createdBy(_id: string) {
+    createdBy(_id: string): Promise<NexusGenRootTypes["User"]> {
         return new UserDAL({ _id }).findOne();
     }
 }
