@@ -1,7 +1,14 @@
-import { Todo } from "../../generated/graphql";
 import { Schema, SchemaTypes, Document, model } from "mongoose";
+import { NexusGenRootTypes } from "../../generated/gql.types";
 
-export type TodoModelType = Document & Todo;
+export type TodoCreateType = {
+    userID: string;
+    title: string;
+    description: string;
+    completed?: boolean;
+};
+
+export type TodoModelType = Document & NexusGenRootTypes["Todo"];
 
 const todo = new Schema(
     {

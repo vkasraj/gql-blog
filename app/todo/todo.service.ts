@@ -1,6 +1,6 @@
+import { NexusGenInputs } from "../../generated/gql.types";
 import { Context } from "../../src/Context";
 import { TodoDAL } from "./todo.dal";
-import { TodoCreateInput, TodoUpdateInput } from "../../generated/graphql";
 
 export class TodoService {
     constructor(private ctx: Context) {}
@@ -28,17 +28,17 @@ export class TodoService {
         return todo;
     }
 
-    createTodo(data: TodoCreateInput) {
+    createTodo(data: NexusGenInputs["TodoCreateInput"]) {
         const { title, description } = data;
 
-        return new TodoDAL({
+        return new TodoDAL().create({
             userID: this.ID,
             title,
             description
-        }).create();
+        });
     }
 
-    async updateTodo(_id: string, data: TodoUpdateInput) {
+    async updateTodo(_id: string, data: NexusGenInputs["TodoUpdateInput"]) {
         const isTodoExists = await new TodoDAL({
             _id,
             userID: this.ID

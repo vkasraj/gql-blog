@@ -1,12 +1,51 @@
-import { LoginInput, SignupInput } from "../../generated/graphql";
 import { UserDAL } from "../user/user.dal";
 import TokenUtil from "../../utils/token.util";
 import PasswordUtil from "../../utils/password.util";
 import { deleteProps } from "../../utils/object.util";
 import { Roles } from "../../@types/types";
+import { NexusGenInputs, NexusGenRootTypes } from "../../generated/gql.types";
+import { Context } from "../../src/Context";
+import { ForbiddenError, AuthenticationError } from "apollo-server";
+import TokenGenerator from "../../utils/token.util";
 
 export class AuthService {
-    async login(data: LoginInput) {
+    constructor(private readonly ctx: Context) {}
+
+    private get token() {
+        return this.ctx.req.headers.authorization;
+    }
+
+    async authorize(roles: Roles[]): Promise<boolean> {
+        try {
+            const token = this.token;
+
+            if (!token) {
+                throw new ForbiddenError(
+                    "Authentication required! Please login."
+                );
+            }
+
+            const decodedToken = TokenGenerator.verify(token as string);
+
+            const rolesSet = new Set(roles);
+
+            if (!rolesSet.has(decodedToken.ROLE)) {
+                throw new AuthenticationError(
+                    "You are not authorized to perform this action."
+                );
+            }
+
+            this.ctx.USER = decodedToken;
+
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async login(
+        data: NexusGenInputs["LoginInput"]
+    ): Promise<NexusGenRootTypes["AuthResponse"]> {
         const { email, password } = data;
 
         const isUserExists = await new UserDAL({ email }).findOne({
@@ -18,7 +57,7 @@ export class AuthService {
         }
 
         const isPwMatched = await new PasswordUtil(password).verify(
-            isUserExists.password
+            isUserExists.password as string
         );
 
         if (!isPwMatched) {
@@ -27,18 +66,25 @@ export class AuthService {
 
         deleteProps(isUserExists, ["password"]);
 
+        const role = Roles.USER;
+
         const token = new TokenUtil({
             ID: isUserExists._id,
-            ROLE: Roles.USER
+            ROLE: role
         }).generate();
 
         return {
             user: isUserExists,
-            token
+            auth: {
+                token,
+                role
+            }
         };
     }
 
-    async signup(data: SignupInput) {
+    async signup(
+        data: NexusGenInputs["SignupInput"]
+    ): Promise<NexusGenRootTypes["AuthResponse"]> {
         const { username, email, password } = data;
 
         const isUserExists = await new UserDAL({
@@ -60,20 +106,25 @@ export class AuthService {
 
         const hashed = await new PasswordUtil(password).hash();
 
-        const user = await new UserDAL({
+        const user = await new UserDAL().create({
             username,
             email,
             password: hashed
-        }).create();
+        });
+
+        const role = Roles.USER;
 
         const token = new TokenUtil({
             ID: user._id,
-            ROLE: Roles.USER
+            ROLE: role
         }).generate();
 
         return {
             user,
-            token
+            auth: {
+                token,
+                role
+            }
         };
     }
 }
