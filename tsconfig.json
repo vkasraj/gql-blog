@@ -76,7 +76,8 @@
         "./generated/**/*.ts",
         "./libs/**/*.ts",
         "./src/**/*.ts",
-        "./utils/**/*.ts"
+        "./utils/**/*.ts",
+        "./package.json"
     ],
     "exclude": ["node_modules", "**/*.spec.ts"]
 }
