@@ -6,7 +6,7 @@ export const Query = objectType({
     definition(t) {
         t.field("me", {
             type: "User",
-            description: "Will return the current logged in user",
+            description: "Get the current logged in user",
             authorize: (_, __, { authService }) => {
                 return authService.authorize([Roles.USER]);
             },
@@ -16,6 +16,7 @@ export const Query = objectType({
         t.field("todos", {
             type: "Todo",
             list: [false],
+            description: "Get all the todos of the current logged in user",
             authorize: (_, __, { authService }) => {
                 return authService.authorize([Roles.USER]);
             },
@@ -25,6 +26,7 @@ export const Query = objectType({
         t.field("todo", {
             type: "Todo",
             nullable: true,
+            description: "Get a specific todo by providing its _id",
             args: {
                 where: arg({
                     type: "FindInput",

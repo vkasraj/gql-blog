@@ -24,17 +24,30 @@ input LoginInput {
 }
 
 type Mutation {
+  """For creating a todo"""
   createTodo(data: TodoCreateInput!): Todo!
+
+  """For deleting a specific todo by providing its _id"""
   deleteTodo(where: FindInput!): Todo!
+
+  """For logging in user"""
   login(data: LoginInput!): AuthResponse!
+
+  """For signing up new users"""
   signup(data: SignupInput!): AuthResponse!
+
+  """For updating a specific todo by providing its _id"""
   updateTodo(data: TodoUpdateInput!, where: FindInput!): Todo!
 }
 
 type Query {
-  """Will return the current logged in user"""
+  """Get the current logged in user"""
   me: User!
+
+  """Get a specific todo by providing its _id"""
   todo(where: FindInput!): Todo
+
+  """Get all the todos of the current logged in user"""
   todos: [Todo]!
 }
 

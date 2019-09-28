@@ -6,6 +6,7 @@ export const Mutation = objectType({
     definition(t) {
         t.field("login", {
             type: "AuthResponse",
+            description: "For logging in user",
             args: {
                 data: arg({
                     type: "LoginInput",
@@ -17,6 +18,7 @@ export const Mutation = objectType({
 
         t.field("signup", {
             type: "AuthResponse",
+            description: "For signing up new users",
             args: {
                 data: arg({
                     type: "SignupInput",
@@ -28,6 +30,7 @@ export const Mutation = objectType({
 
         t.field("createTodo", {
             type: "Todo",
+            description: "For creating a todo",
             args: {
                 data: arg({
                     type: "TodoCreateInput",
@@ -44,6 +47,7 @@ export const Mutation = objectType({
 
         t.field("updateTodo", {
             type: "Todo",
+            description: "For updating a specific todo by providing its _id",
             args: {
                 where: arg({
                     type: "FindInput",
@@ -64,6 +68,7 @@ export const Mutation = objectType({
 
         t.field("deleteTodo", {
             type: "Todo",
+            description: "For deleting a specific todo by providing its _id",
             args: {
                 where: arg({
                     type: "FindInput",
