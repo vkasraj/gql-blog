@@ -3,6 +3,7 @@
 .intermediate
 .DS_STORE
 build
+package-lock.json
 
 
 # Logs
