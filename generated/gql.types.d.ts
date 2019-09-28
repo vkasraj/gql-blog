@@ -46,11 +46,16 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
+  AuthRoles: "ADMIN" | "USER"
 }
 
 export interface NexusGenRootTypes {
-  AuthResponse: { // root type
+  AuthInfo: { // root type
+    role: NexusGenEnums['AuthRoles']; // AuthRoles!
     token: string; // String!
+  }
+  AuthResponse: { // root type
+    auth: NexusGenRootTypes['AuthInfo']; // AuthInfo!
     user: NexusGenRootTypes['User']; // User!
   }
   Mutation: {};
@@ -83,11 +88,16 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
   SignupInput: NexusGenInputs['SignupInput'];
   TodoCreateInput: NexusGenInputs['TodoCreateInput'];
   TodoUpdateInput: NexusGenInputs['TodoUpdateInput'];
+  AuthRoles: NexusGenEnums['AuthRoles'];
 }
 
 export interface NexusGenFieldTypes {
-  AuthResponse: { // field return type
+  AuthInfo: { // field return type
+    role: NexusGenEnums['AuthRoles']; // AuthRoles!
     token: string; // String!
+  }
+  AuthResponse: { // field return type
+    auth: NexusGenRootTypes['AuthInfo']; // AuthInfo!
     user: NexusGenRootTypes['User']; // User!
   }
   Mutation: { // field return type
@@ -150,11 +160,11 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "AuthResponse" | "Mutation" | "Query" | "Todo" | "User";
+export type NexusGenObjectNames = "AuthInfo" | "AuthResponse" | "Mutation" | "Query" | "Todo" | "User";
 
 export type NexusGenInputNames = "FindInput" | "LoginInput" | "SignupInput" | "TodoCreateInput" | "TodoUpdateInput";
 
-export type NexusGenEnumNames = never;
+export type NexusGenEnumNames = "AuthRoles";
 
 export type NexusGenInterfaceNames = never;
 

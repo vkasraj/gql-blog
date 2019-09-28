@@ -2,9 +2,20 @@
 ### Do not make changes to this file directly
 
 
-type AuthResponse {
+type AuthInfo {
+  role: AuthRoles!
   token: String!
+}
+
+type AuthResponse {
+  auth: AuthInfo!
   user: User!
+}
+
+"""Roles for the authenticated users"""
+enum AuthRoles {
+  ADMIN
+  USER
 }
 
 """

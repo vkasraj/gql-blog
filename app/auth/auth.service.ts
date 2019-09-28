@@ -66,14 +66,19 @@ export class AuthService {
 
         deleteProps(isUserExists, ["password"]);
 
+        const role = Roles.USER;
+
         const token = new TokenUtil({
             ID: isUserExists._id,
-            ROLE: Roles.USER
+            ROLE: role
         }).generate();
 
         return {
             user: isUserExists,
-            token
+            auth: {
+                token,
+                role
+            }
         };
     }
 
@@ -107,14 +112,19 @@ export class AuthService {
             password: hashed
         });
 
+        const role = Roles.USER;
+
         const token = new TokenUtil({
             ID: user._id,
-            ROLE: Roles.USER
+            ROLE: role
         }).generate();
 
         return {
             user,
-            token
+            auth: {
+                token,
+                role
+            }
         };
     }
 }
