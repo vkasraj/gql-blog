@@ -1,4 +1,5 @@
 import { objectType, arg } from "nexus";
+import { Roles } from "../../@types/types";
 
 export const Query = objectType({
     name: "Query",
@@ -6,12 +7,18 @@ export const Query = objectType({
         t.field("me", {
             type: "User",
             description: "Will return the current logged in user",
+            authorize: (_, __, { authService }) => {
+                return authService.authorize([Roles.USER]);
+            },
             resolve: (_, __, { userService }) => userService.me()
         });
 
         t.field("todos", {
             type: "Todo",
             list: [false],
+            authorize: (_, __, { authService }) => {
+                return authService.authorize([Roles.USER]);
+            },
             resolve: (_, __, { todoService }) => todoService.todos()
         });
 
@@ -23,6 +30,9 @@ export const Query = objectType({
                     type: "FindInput",
                     required: true
                 })
+            },
+            authorize: (_, __, { authService }) => {
+                return authService.authorize([Roles.USER]);
             },
             resolve: (_, { where }, { todoService }) => {
                 return todoService.todo(where._id);

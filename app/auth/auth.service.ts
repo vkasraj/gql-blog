@@ -4,8 +4,45 @@ import PasswordUtil from "../../utils/password.util";
 import { deleteProps } from "../../utils/object.util";
 import { Roles } from "../../@types/types";
 import { NexusGenInputs, NexusGenRootTypes } from "../../generated/gql.types";
+import { Context } from "../../src/Context";
+import { ForbiddenError, AuthenticationError } from "apollo-server";
+import TokenGenerator from "../../utils/token.util";
 
 export class AuthService {
+    constructor(private readonly ctx: Context) {}
+
+    private get token() {
+        return this.ctx.req.headers.authorization;
+    }
+
+    async authorize(roles: Roles[]): Promise<boolean> {
+        try {
+            const token = this.token;
+
+            if (!token) {
+                throw new ForbiddenError(
+                    "Authentication required! Please login."
+                );
+            }
+
+            const decodedToken = TokenGenerator.verify(token as string);
+
+            const rolesSet = new Set(roles);
+
+            if (!rolesSet.has(decodedToken.ROLE)) {
+                throw new AuthenticationError(
+                    "You are not authorized to perform this action."
+                );
+            }
+
+            this.ctx.USER = decodedToken;
+
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async login(
         data: NexusGenInputs["LoginInput"]
     ): Promise<NexusGenRootTypes["AuthResponse"]> {

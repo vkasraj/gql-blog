@@ -1,4 +1,5 @@
 import { objectType, arg } from "nexus";
+import { Roles } from "../../@types/types";
 
 export const Mutation = objectType({
     name: "Mutation",
@@ -33,6 +34,9 @@ export const Mutation = objectType({
                     required: true
                 })
             },
+            authorize: (_, __, { authService }) => {
+                return authService.authorize([Roles.USER]);
+            },
             resolve: (_, { data }, { todoService }) => {
                 return todoService.createTodo(data);
             }
@@ -50,6 +54,9 @@ export const Mutation = objectType({
                     required: true
                 })
             },
+            authorize: (_, __, { authService }) => {
+                return authService.authorize([Roles.USER]);
+            },
             resolve: (_, { where, data }, { todoService }) => {
                 return todoService.updateTodo(where._id, data);
             }
@@ -62,6 +69,9 @@ export const Mutation = objectType({
                     type: "FindInput",
                     required: true
                 })
+            },
+            authorize: (_, __, { authService }) => {
+                return authService.authorize([Roles.USER]);
             },
             resolve: (_, { where }, { todoService }) => {
                 return todoService.deleteTodo(where._id);
