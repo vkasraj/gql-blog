@@ -8,23 +8,24 @@ const graphqlSchema = makeSchema({
     types: allTypes,
     outputs: {
         schema: join(__dirname, "../generated/schema.graphql"),
-        typegen: join(__dirname, "../generated/gql.types.d.ts")
+        typegen: join(__dirname, "../generated/gql.types.d.ts"),
     },
     typegenAutoConfig: {
         contextType: "ctx.Context",
         sources: [
             {
                 alias: "ctx",
-                source: join(__dirname, "Context.ts")
-            }
+                source: join(__dirname, "Context.ts"),
+            },
         ],
         backingTypeMap: {
-            DateTime: "Date"
-        }
-    }
+            DateTime: "Date",
+        },
+    },
 });
 
 export const server = new ApolloServer({
     schema: graphqlSchema,
-    context: ctx => new Context(ctx)
+    context: ctx => new Context(ctx),
+    introspection: true,
 });
