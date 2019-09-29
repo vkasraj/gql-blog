@@ -6,7 +6,6 @@ import { deleteProps } from "../../utils/object.util";
 import { Roles } from "../../@types/types";
 import { NexusGenInputs, NexusGenRootTypes } from "../../generated/gql.types";
 import { Context } from "../../src/context";
-import TokenGenerator from "../../utils/token.util";
 
 export class AuthService {
     constructor(private readonly ctx: Context) {}
@@ -15,32 +14,26 @@ export class AuthService {
         return this.ctx.req.headers.authorization;
     }
 
-    async authorize(roles: Roles[]): Promise<boolean> {
-        try {
-            const {token} = this;
+    authorize(roles: Roles[]): boolean {
+        const { token } = this;
 
-            if (!token) {
-                throw new ForbiddenError(
-                    "Authentication required! Please login."
-                );
-            }
-
-            const decodedToken = TokenGenerator.verify(token as string);
-
-            const rolesSet = new Set(roles);
-
-            if (!rolesSet.has(decodedToken.ROLE)) {
-                throw new AuthenticationError(
-                    "You are not authorized to perform this action."
-                );
-            }
-
-            this.ctx.USER = decodedToken;
-
-            return true;
-        } catch (error) {
-            throw error;
+        if (!token) {
+            throw new ForbiddenError("Authentication required! Please login.");
         }
+
+        const decodedToken = TokenUtil.verify(token);
+
+        const rolesSet = new Set(roles);
+
+        if (!rolesSet.has(decodedToken.ROLE)) {
+            throw new AuthenticationError(
+                "You are not authorized to perform this action."
+            );
+        }
+
+        this.ctx.USER = decodedToken;
+
+        return true;
     }
 
     async login(
@@ -94,8 +87,9 @@ export class AuthService {
         });
 
         if (isUserExists) {
-            const msg = (type: string) =>
-                `User already exists with this ${type}`;
+            const msg = (type: string) => {
+                return `User already exists with this ${type}`;
+            };
 
             if (isUserExists.email === email) {
                 throw new Error(msg("email"));

@@ -6,13 +6,16 @@ import { UserService } from "../app/user/user.service";
 
 export class Context {
     private me: TokenPayload;
+
     authService = new AuthService(this);
+
     todoService = new TodoService(this);
+
     userService = new UserService(this);
 
     constructor(private ctx: ExpressContext) {}
 
-    get req() {
+    get req(): ExpressContext["req"] {
         return this.ctx.req;
     }
 

@@ -6,7 +6,7 @@ export interface DALOptions {
 
 export enum Roles {
     USER = "USER",
-    ADMIN = "ADMIN"
+    ADMIN = "ADMIN",
 }
 
 export interface TokenPayload {

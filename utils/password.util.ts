@@ -12,12 +12,11 @@ export default class PasswordUtil {
 
                 resolve(hash);
             } catch (err) {
-                err = new Error("Unable to hash password");
-
                 reject(err);
             }
         });
     }
+
     // For verifying password
     verify(hash: string) {
         return compare(this.password, hash);

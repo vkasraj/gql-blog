@@ -16,7 +16,7 @@ export const generate = ({ secret, exp, payload }: TokenGeneratePayload) => {
 
     return jwt.sign(payload, $secret, {
         // algorithm: ["HS256"],
-        expiresIn: exp
+        expiresIn: exp,
     });
 };
 
@@ -25,6 +25,6 @@ export const verify = (secret: string, token: string) => {
     const $secret = genBuff(secret);
 
     return jwt.verify(token, $secret, {
-        algorithms: ["HS256"]
+        algorithms: ["HS256"],
     });
 };

@@ -8,17 +8,11 @@ export default class TokenGenerator {
 
     // For generating access token
     generate(): string {
-        try {
-            const accessToken = generate({
-                secret: TOKEN_KEY,
-                exp: TOKEN_EXP,
-                payload: this.ctx
-            });
-
-            return accessToken;
-        } catch (error) {
-            throw error;
-        }
+        return generate({
+            secret: TOKEN_KEY,
+            exp: TOKEN_EXP,
+            payload: this.ctx,
+        });
     }
 
     static verify(token: string): TokenPayload {
