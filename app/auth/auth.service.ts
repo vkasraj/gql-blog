@@ -1,11 +1,11 @@
+import { ForbiddenError, AuthenticationError } from "apollo-server";
 import { UserDAL } from "../user/user.dal";
 import TokenUtil from "../../utils/token.util";
 import PasswordUtil from "../../utils/password.util";
 import { deleteProps } from "../../utils/object.util";
 import { Roles } from "../../@types/types";
 import { NexusGenInputs, NexusGenRootTypes } from "../../generated/gql.types";
-import { Context } from "../../src/Context";
-import { ForbiddenError, AuthenticationError } from "apollo-server";
+import { Context } from "../../src/context";
 import TokenGenerator from "../../utils/token.util";
 
 export class AuthService {
@@ -17,7 +17,7 @@ export class AuthService {
 
     async authorize(roles: Roles[]): Promise<boolean> {
         try {
-            const token = this.token;
+            const {token} = this;
 
             if (!token) {
                 throw new ForbiddenError(
@@ -49,7 +49,7 @@ export class AuthService {
         const { email, password } = data;
 
         const isUserExists = await new UserDAL({ email }).findOne({
-            select: "-__v -createdAt -updatedAt"
+            select: "-__v -createdAt -updatedAt",
         });
 
         if (!isUserExists) {
@@ -70,15 +70,15 @@ export class AuthService {
 
         const token = new TokenUtil({
             ID: isUserExists._id,
-            ROLE: role
+            ROLE: role,
         }).generate();
 
         return {
             user: isUserExists,
             auth: {
                 token,
-                role
-            }
+                role,
+            },
         };
     }
 
@@ -88,9 +88,9 @@ export class AuthService {
         const { username, email, password } = data;
 
         const isUserExists = await new UserDAL({
-            $or: [{ username }, { email }]
+            $or: [{ username }, { email }],
         }).findOne({
-            select: "username email"
+            select: "username email",
         });
 
         if (isUserExists) {
@@ -109,22 +109,22 @@ export class AuthService {
         const user = await new UserDAL().create({
             username,
             email,
-            password: hashed
+            password: hashed,
         });
 
         const role = Roles.USER;
 
         const token = new TokenUtil({
             ID: user._id,
-            ROLE: role
+            ROLE: role,
         }).generate();
 
         return {
             user,
             auth: {
                 token,
-                role
-            }
+                role,
+            },
         };
     }
 }

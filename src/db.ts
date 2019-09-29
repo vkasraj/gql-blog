@@ -6,7 +6,7 @@ export const db = (uri: string) => {
         {
             useNewUrlParser: true,
             useFindAndModify: false,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
         }
     );
 };

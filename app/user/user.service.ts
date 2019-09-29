@@ -1,4 +1,4 @@
-import { Context } from "../../src/Context";
+import { Context } from "../../src/context";
 import { UserDAL } from "./user.dal";
 
 export class UserService {

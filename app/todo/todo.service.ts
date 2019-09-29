@@ -1,5 +1,5 @@
 import { NexusGenInputs } from "../../generated/gql.types";
-import { Context } from "../../src/Context";
+import { Context } from "../../src/context";
 import { TodoDAL } from "./todo.dal";
 
 export class TodoService {
@@ -11,14 +11,14 @@ export class TodoService {
 
     todos() {
         return new TodoDAL({
-            userID: this.ID
+            userID: this.ID,
         }).findAll();
     }
 
     async todo(_id: string) {
         const todo = await new TodoDAL({
             _id,
-            userID: this.ID
+            userID: this.ID,
         }).findOne();
 
         if (!todo) {
@@ -34,14 +34,14 @@ export class TodoService {
         return new TodoDAL().create({
             userID: this.ID,
             title,
-            description
+            description,
         });
     }
 
     async updateTodo(_id: string, data: NexusGenInputs["TodoUpdateInput"]) {
         const isTodoExists = await new TodoDAL({
             _id,
-            userID: this.ID
+            userID: this.ID,
         }).updateOne(data);
 
         if (!isTodoExists) {
@@ -56,7 +56,7 @@ export class TodoService {
     async deleteTodo(_id: string) {
         const isTodoExists = await new TodoDAL({
             _id,
-            userID: this.ID
+            userID: this.ID,
         }).deleteOne();
 
         if (!isTodoExists) {

@@ -1,8 +1,8 @@
 import { join } from "path";
 import { ApolloServer } from "apollo-server";
 import { makeSchema } from "nexus";
-import * as allTypes from "./schema/index";
-import { Context } from "./Context";
+import * as allTypes from "./schema";
+import { Context } from "./context";
 
 const graphqlSchema = makeSchema({
     types: allTypes,
@@ -15,7 +15,7 @@ const graphqlSchema = makeSchema({
         sources: [
             {
                 alias: "ctx",
-                source: join(__dirname, "Context.ts"),
+                source: join(__dirname, "context.ts"),
             },
         ],
         backingTypeMap: {
@@ -26,6 +26,6 @@ const graphqlSchema = makeSchema({
 
 export const server = new ApolloServer({
     schema: graphqlSchema,
-    context: ctx => new Context(ctx),
+    context: (ctx): Context => new Context(ctx),
     introspection: true,
 });
