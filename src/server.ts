@@ -17,6 +17,10 @@ const graphqlSchema = makeSchema({
                 alias: "ctx",
                 source: join(__dirname, "context.ts"),
             },
+            {
+                alias: "backingTypes",
+                source: join(__dirname, "..", "@types/backingTypes.ts"),
+            },
         ],
         backingTypeMap: {
             DateTime: "Date",

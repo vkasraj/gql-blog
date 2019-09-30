@@ -14,7 +14,6 @@ export const Todo = objectType({
         t.string("title");
         t.string("description");
         t.boolean("completed");
-        t.string("userID");
         t.date("createdAt");
         t.date("updatedAt");
         t.field("createdBy", {

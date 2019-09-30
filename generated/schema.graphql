@@ -76,7 +76,6 @@ type Todo {
   description: String!
   title: String!
   updatedAt: DateTime!
-  userID: String!
 }
 
 input TodoCreateInput {

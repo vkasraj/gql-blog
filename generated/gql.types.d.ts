@@ -3,6 +3,7 @@
  * Do not make changes to this file directly
  */
 
+import * as backingTypes from "../@types/backingTypes"
 import * as ctx from "../src/context"
 import { core } from "nexus"
 declare global {
@@ -60,15 +61,7 @@ export interface NexusGenRootTypes {
   }
   Mutation: {};
   Query: {};
-  Todo: { // root type
-    _id: string; // ID!
-    completed: boolean; // Boolean!
-    createdAt: Date; // DateTime!
-    description: string; // String!
-    title: string; // String!
-    updatedAt: Date; // DateTime!
-    userID: string; // String!
-  }
+  Todo: backingTypes.Todo;
   User: { // root type
     _id: string; // ID!
     email: string; // String!
@@ -120,7 +113,6 @@ export interface NexusGenFieldTypes {
     description: string; // String!
     title: string; // String!
     updatedAt: Date; // DateTime!
-    userID: string; // String!
   }
   User: { // field return type
     _id: string; // ID!
